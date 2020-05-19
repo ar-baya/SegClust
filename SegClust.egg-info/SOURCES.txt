@@ -1,0 +1,8 @@
+README.md
+setup.py
+SegClust/__init__.py
+SegClust/toolbox.py
+SegClust.egg-info/PKG-INFO
+SegClust.egg-info/SOURCES.txt
+SegClust.egg-info/dependency_links.txt
+SegClust.egg-info/top_level.txt
