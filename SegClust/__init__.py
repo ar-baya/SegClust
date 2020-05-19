@@ -1,3 +1,11 @@
+"""@package docstring
+Pixel sampling by clustering code.
+
+SegClust class creates an object to find relevant pixel. These pixels can be used
+i) to reconstruct the image using a reduced set of the intensities
+ii) to cluster the image
+"""
+
 import warnings
 
 import gc
@@ -20,6 +28,11 @@ warnings.filterwarnings('ignore')
 class SegClust:
 
     def __init__(self):
+    """Class constructor.
+
+    Initializes valiables.
+    """
+
         self.mode = None
         self.img = None
         self.im_shift = None
@@ -76,6 +89,9 @@ class SegClust:
 
     def set(self, sp=None, sr=60, blur_size=3, sampling_rad=None, min_samples_reduce=100, min_samples=50, size_limit=100,
             n_neigbouhrs=11, whiten=False, no_pca=True, mode='rec'):
+        """Resets variables and set them to default/user defined values.
+
+        """
         self.__init__()
         self.mode = mode
         self.size_limit = size_limit
@@ -102,6 +118,9 @@ class SegClust:
             self.eps_filter = self.eps_filter_no_whiten
 
     def birch_sample(self):
+        """Applies Birch and DBSCAN to the image. Not for consumer use.
+
+        """
         self.birch_thr = self.eps_filter/10.
         brc = Birch(branching_factor=50, n_clusters=None, threshold=self.birch_thr, compute_labels=True)
         self.divide_labels = brc.fit_predict(self.xyz)
@@ -115,7 +134,9 @@ class SegClust:
         return lab_out, tmp_brc
 
     def prep(self, image):
+        """Initializes the object using image information. Not for consumer use.
 
+        """
         self.do_prep = False
         if len(image.shape) < 2:
             image = np.reshape(image, (image.shape[0], image.shape[1], 1))
@@ -190,11 +211,8 @@ class SegClust:
         return last_err, err_v_tr, idx
 
     def closeKolor(self, img, n_iter=5, heatpoints=1, correct_model=True):
-        """
-        agrega puntos para reducir el error de reconstruccion del algo. de sampleo
-        :param img:
-        :param n_iter:
-        :return:
+        """Creates iterative image model. Not for consumer use.
+
         """
         if n_iter < 1:
             correct_model = False
@@ -256,7 +274,28 @@ class SegClust:
         return img_k
 
     def ColorModel(self, img, correct_model=True, model_iter=5, heatpoints=1):
+        """Creates image model.
 
+        Parameters
+        ----------
+        img : 3D np.ndarray
+            An np.ndarray of size n x m x 3. Input image (3 channel)
+        correct_model : boolean
+            True means that an iterative method to build
+            the model is used.
+        labels : 1D np.ndarray
+            An 1D np.ndarray with the labels for self.xyz_centroids.
+            self.xyz_centroids is ColorModel's method output.
+        model_iter : np.int32
+            Number of iteration used to create a model.
+        heatpoints : np.int32
+            Number of points added each iteration. The method
+            adds heatpoints * model_iter in total.
+        Returns
+        -------
+        array : 3D np.ndarray
+            An ndarray representing the input image color model.
+        """
         self.im_color_seg = None
         self.labels_no = None
         self.labels_centroids = None
@@ -271,15 +310,24 @@ class SegClust:
 
         return self.xyz_centroids
 
-    def setup(self, img, correct_model=True, model_iter=5, heatpoints=1):
-        if self.do_prep:
-            if correct_model:
-                    self.closeKolor(img, n_iter=model_iter, heatpoints=heatpoints)
-            else:
-                    self.prep(img)
-        self.xyz_centroids = self.xyz_centroids_backup.copy()
-
     def fit_predict(self, labels, usecolor=False):
+
+        """Creates a mask using the provided labels and the model find by
+        ColorModel.
+
+        Parameters
+        ----------
+        labels : 1D np.ndarray
+            An 1D np.ndarray with the labels for self.xyz_centroids.
+            self.xyz_centroids is ColorModel's method output.
+        usecolor : boolean
+            True RGB color output. False means np.int32 output.
+        Returns
+        -------
+        array : 2D np.ndarray or 3D np.ndarray
+            A mask for the ColorModel input image img. An m x n or m x n x 3
+            np.ndarray depending on usecolor.
+        """
 
         xyz_no = self.xyz_centroids[labels > -1, :]
         ls = labels[labels > -1]
@@ -303,7 +351,18 @@ class SegClust:
         return L_
 
     def colorizelabel(self, labels):
+        """Creates a color mask using np.int32 labels.
 
+        Parameters
+        ----------
+        labels : 1D np.ndarray
+            integer class/clustering labels.
+        Returns
+        -------
+        array : label.size x 3
+            RGB color labels.
+
+        """
         uni = np.unique(labels)
         list = sns.color_palette('bright', uni.size+1)
         c_arr = np.ndarray(shape=(uni.size+1, 3), dtype=np.uint8)
