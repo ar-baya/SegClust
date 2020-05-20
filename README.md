@@ -94,7 +94,7 @@ for i_mod, model_iter in enumerate(N):
     worker.set(sp=sp, sr=sr, blur_size=blur_size, sampling_rad=sampling_rad,
                min_samples_reduce=min_samples_reduce,
                min_samples=min_samples, size_limit=size_limit, no_pca=no_pca, whiten=whiten)
-    worker.setup(img, model_iter=model_iter, heatpoints=20)
+    worker.ColorModel(img, model_iter=model_iter, heatpoints=20)
     img_ = worker.img_clone.copy()
     img_f = worker.fitted_img.copy()
     id = np.sum((img_-img_f)**2, axis=2)+1
