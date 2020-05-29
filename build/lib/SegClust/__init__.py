@@ -1,6 +1,6 @@
 """@package docstring
 Pixel sampling by clustering code.
-
+[Pixel sampling by clustering](https://doi.org/10.1016/j.eswa.2020.113576)
 SegClust class creates an object to find relevant pixel. These pixels can be used
 i) to reconstruct the image using a reduced set of the intensities
 ii) to cluster the image

@@ -4,6 +4,7 @@ Python 3 code implementation from the Pixel sampling by clustering paper
 [Github Link](https://github.com/ar-baya/SegClust.git)
 For accuratte technical description you can read [Pixel sampling by clustering](https://doi.org/10.1016/j.eswa.2020.113576). Below we include some examples.
 
+You can find python 3 Package and tar.gz source in the /dist folder.
 # Image reconstruction example
 
 ```python
