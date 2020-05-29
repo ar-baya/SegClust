@@ -1,8 +1,8 @@
 # SegClust Package
 
 Python 3 code implementation from the Pixel sampling by clustering paper
-[Github Link](https://)
-For accuratte technical description you can read 'Pixel sampling by clustering'. Below we include some examples.
+[Github Link](https://github.com/ar-baya/SegClust.git)
+For accuratte technical description you can read [Pixel sampling by clustering](https://doi.org/10.1016/j.eswa.2020.113576). Below we include some examples.
 
 # Image reconstruction example
 
